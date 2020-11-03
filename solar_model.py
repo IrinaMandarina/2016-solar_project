@@ -18,27 +18,27 @@ def calculate_force(body, space_objects):
     for obj in space_objects:
         if body == obj:
             continue  # тело не действует гравитационной силой на само себя!
-        r = ((body.x - obj.x)**2 + (body.y - obj.y)**2)**0.5
-        body.Fx += ((obj.m*body.m)*gravitational_constant/(r**2))*(obj.x-body.x)/r  #Fix mb FIXME: нужно вывести формулу...
-        body.Fy += ((obj.m*body.m)*gravitational_constant/(r**2))*(obj.y-body.y)/r  #Fix mb FIXME: нужно вывести формулу...
+        r = ((body.x - obj.x) ** 2 + (body.y - obj.y) ** 2) ** 0.5
+        body.Fx += ((obj.m * body.m) * gravitational_constant / (r ** 2)) * (
+                    obj.x - body.x) / r  # Fix mb FIXME: нужно вывести формулу...
+        body.Fy += ((obj.m * body.m) * gravitational_constant / (r ** 2)) * (
+                    obj.y - body.y) / r  # Fix mb FIXME: нужно вывести формулу...
 
 
 def move_space_object(body, dt):
     """Перемещает тело в соответствии с действующей на него силой.
-
     Параметры:
-
     **body** — тело, которое нужно переместить.
     """
 
-    ax = body.Fx/body.m
-    body.x += body.Vx #Fix mb FIXME: не понимаю как менять...
-    body.Vx += ax*dt
+    ax = int(body.Fx / body.m)
+    body.x += body.Vx  # Fix mb FIXME: не понимаю как менять...
+    body.Vx += ax * dt
 
-    ay = body.Fy / body.m
-    body.y += body.Vy  #Fix mb FIXME: не понимаю как менять...
+    ay = int(body.Fy / body.m)
+    body.y += body.Vy  # Fix mb FIXME: не понимаю как менять...
     body.Vy += ay * dt
-    # FIXME: not done recalculation of y coordinate!
+    return body
 
 
 def recalculate_space_objects_positions(space_objects, dt):
@@ -53,7 +53,7 @@ def recalculate_space_objects_positions(space_objects, dt):
     for body in space_objects:
         calculate_force(body, space_objects)
     for body in space_objects:
-        move_space_object(body, dt)
+        body = move_space_object(body, dt)
 
 
 if __name__ == "__main__":
