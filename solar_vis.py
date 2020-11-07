@@ -9,27 +9,27 @@
 header_font = "Arial-16"
 """Шрифт в заголовке"""
 
-window_width = 800
+window_width = 400
 """Ширина окна"""
 
-window_height = 500
+window_height = 400
 """Высота окна"""
 
 scale_factor = None
 """Масштабирование экранных координат по отношению к физическим.
-Тип: float
-Мера: количество пикселей на один метр."""
+(float)
+Обозначает количество пикселей на один метр."""
 
 
 def calculate_scale_factor(max_distance):
-    """Вычисляет значение глобальной переменной **scale_factor** по данной характерной длине"""
+    """Вычисление значения глобальной переменной **scale_factor** по данной длине"""
     global scale_factor
     scale_factor = 0.4*min(window_height, window_width)/max_distance
     print('Scale factor:', scale_factor)
 
 
 def scale_x(x):
-    """Возвращает экранную **x** координату по **x** координате модели.
+    """Возвращение экранной **x** координаты по **x** координате модели.
     Принимает вещественное число, возвращает целое число.
     В случае выхода **x** координаты за пределы экрана возвращает
     координату, лежащую за пределами холста.
@@ -43,7 +43,7 @@ def scale_x(x):
 
 
 def scale_y(y):
-    """Возвращает экранную **y** координату по **y** координате модели.
+    """Возвращение экранной **y** координаты по **y** координате модели.
     Принимает вещественное число, возвращает целое число.
     В случае выхода **y** координаты за пределы экрана возвращает
     координату, лежащую за пределами холста.
@@ -54,11 +54,11 @@ def scale_y(y):
     **y** — y-координата модели.
     """
 
-    return int(y*scale_factor) + window_height//2
+    return  int(y*scale_factor) + window_height//2  #FIX:D
 
 
 def create_star_image(space, star):
-    """Создаёт отображаемый объект звезды.
+    """Создание отображаемого объекта звезды на холсте.
 
     Параметры:
 
@@ -73,7 +73,7 @@ def create_star_image(space, star):
 
 
 def create_planet_image(space, planet):
-    """Создаёт отображаемый объект планеты.
+    """Создание отображаемого объекта планеты на холсте.
 
     Параметры:
 
@@ -82,13 +82,13 @@ def create_planet_image(space, planet):
     """
     x = scale_x(planet.x)
     y = scale_y(planet.y)
-    r = planet.R
-    planet.image = space.create_oval([x - r, y - r], [x + r, y + r], fill=planet.color)
+    r=planet.R
+    planet.image = space.create_oval([x-r, y-r], [x+r, y+r], fill=planet.color) #FIX.D
 
 
 def update_system_name(space, system_name):
-    """Создаёт на холсте текст с названием системы небесных тел.
-    Если текст уже был, обновляет его содержание.
+    """Создание на холсте текста с названием системы небесных тел.
+    Если текст уже был, обновление его содержания.
 
     Параметры:
 
@@ -99,7 +99,7 @@ def update_system_name(space, system_name):
 
 
 def update_object_position(space, body):
-    """Перемещает отображаемый объект на холсте.
+    """Перемещение отображаемого объекта на холсте.
 
     Параметры:
 
