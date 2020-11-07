@@ -2,7 +2,13 @@
 # license: GPLv3
 
 from solar_objects import Star, Planet
-
+#def calc(a):
+    #if 'E' in a:
+        #b = a.split('E')
+        #c = float(b[0])*10**(float(b[1]))
+   # else:
+       # c = float(a)
+    #return c
 
 def read_space_objects_data_from_file(input_filename):
     """Cчитывает данные о космических объектах из файла, создаёт сами объекты
@@ -10,26 +16,25 @@ def read_space_objects_data_from_file(input_filename):
 
     Параметры:
 
-    **input_filename** — имя входного файла
+    input_filename — имя входного файла
     """
 
     objects = []
     with open(input_filename) as input_file:
         for line in input_file:
             if len(line.strip()) == 0 or line[0] == '#':
-                continue
+                continue  # пустые строки и строки-комментарии пропускаем
             object_type = line.split()[0].lower()
-            if object_type == "star":
+            if object_type == "star":  # FIXED
                 star = Star()
-                star = parse_star_parameters(line, star)
+                parse_star_parameters(line, star)
                 objects.append(star)
+            elif object_type == "planet":  # FIXED
+                planet = Planet()
+                parse_planet_parameters(line, planet)
+                objects.append(planet)
             else:
-                if object_type == "planet":
-                    planet = Planet()
-                    planet = parse_planet_parameters(line, planet)
-                    objects.append(planet)
-                else:
-                    print("Unknown space object")
+                print("Unknown space object")
 
     return objects
 
@@ -45,19 +50,22 @@ def parse_star_parameters(line, star):
 
     Параметры:
 
-    **line** — строка с описание звезды.
-    **star** — объект звезды.
+    line — строка с описание звезды.
+    star — объект звезды.
     """
+    a = line.split()
+    star.R = float(a[1])
+    star.color = a[2]
+    star.m = float(a[3])
+    star.x = float(a[4])
+    star.y = float(a[5])
+    star.Vx = float(a[6])
+    star.Vy = float(a[7])
 
-    star.R = int(line.split()[1])
-    star.color = line.split()[2]
-    star.m = float(line.split()[3])
-    star.x = int(float(line.split()[4]))
-    star.y = int(float(line.split()[5]))
-    star.Vx = int(float(line.split()[6]))
-    star.Vy = int(float(line.split()[7]))
-    return star
 
+
+
+    #pass  # FIXED
 
 def parse_planet_parameters(line, planet):
     """Считывает данные о планете из строки.
@@ -67,21 +75,25 @@ def parse_planet_parameters(line, planet):
 
     Здесь (x, y) — координаты планеты, (Vx, Vy) — скорость.
     Пример строки:
-    Planet 10 red 1000 1 2 3 4
+    Planet 100 red 1010 1 2 3 4
 
     Параметры:
-
-    **line** — строка с описание планеты.
-    **planet** — объект планеты.
+    planet — объект планеты.
+    line — строка с описание планеты.
     """
-    planet.R = int(line.split()[1])
-    planet.color = line.split()[2]
-    planet.m = int(float(line.split()[3]))
-    planet.x = int(float(line.split()[4]))
-    planet.y = int(float(line.split()[5]))
-    planet.Vx = int(float(line.split()[6]))
-    planet.Vy = int(float(line.split()[7]))
-    return planet
+
+    a = line.split()
+    planet.R = float(a[1])
+    planet.color = a[2]
+    planet.m =float(a[3])
+    planet.x =float(a[4])
+    planet.y = float(a[5])
+    planet.Vx = float(a[6])
+    planet.Vy =float(a[7])
+
+
+
+
 
 
 def write_space_objects_data_to_file(output_filename, space_objects):
@@ -92,15 +104,17 @@ def write_space_objects_data_to_file(output_filename, space_objects):
 
     Параметры:
 
-    **output_filename** — имя входного файла
-    **space_objects** — список объектов планет и звёзд
+    space_objects — список объектов планет и звёзд
+    output_filename — имя входного файла
+
     """
-    with open(output_filename, 'w') as out_file:
-        for obj in space_objects:
-            print(' '.join(map(str, obj)), file=out_file)
+    out_file = open(output_filename, 'w')
+    for obj in space_objects:
+        out_file.write(obj.type + ' ' + str(obj.R) + ' ' + obj.color + ' ' + str(obj.m) + ' ' + str(obj.x) +
+                       ' ' + str(obj.y) + ' ' + str(obj.Vx) + ' ' + str(obj.Vy) + '\n')#это было больно ...
+    out_file.close()
 
 
-# FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
 
 if __name__ == "__main__":
     print("This module is not for direct call!")

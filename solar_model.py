@@ -2,43 +2,43 @@
 # license: GPLv3
 
 gravitational_constant = 6.67408E-11
-"""Гравитационная постоянная Ньютона G"""
+"""Гравитационная постоянная Ньютона Gыыыы"""
 
 
 def calculate_force(body, space_objects):
     """Вычисляет силу, действующую на тело.
-
+    Fx,Fy проекции сил
     Параметры:
 
-    **body** — тело, для которого нужно вычислить дейстующую силу.
-    **space_objects** — список объектов, которые воздействуют на тело.
+    body — тело, для которого нужно вычислить дейстующую силу.
+    space_objects — список объектов, которые воздействуют на тело.
     """
 
     body.Fx = body.Fy = 0
     for obj in space_objects:
         if body == obj:
             continue  # тело не действует гравитационной силой на само себя!
-        r = ((body.x - obj.x) ** 2 + (body.y - obj.y) ** 2) ** 0.5
-        body.Fx += ((obj.m * body.m) * gravitational_constant / (r ** 2)) * (
-                    obj.x - body.x) / r  # Fix mb FIXME: нужно вывести формулу...
-        body.Fy += ((obj.m * body.m) * gravitational_constant / (r ** 2)) * (
-                    obj.y - body.y) / r  # Fix mb FIXME: нужно вывести формулу...
+        r = ((body.x - obj.x)**2 + (body.y - obj.y)**2)**0.5
+        body.F = gravitational_constant*body.m*obj.m/r**2
+        body.Fx += (obj.x -body.x)/r*body.F
+        body.Fy += (obj.y - body.y)/r*body.F
 
 
 def move_space_object(body, dt):
-    """Перемещает тело в соответствии с действующей на него силой.
+    """Перемещает тело учитывая силу действующей на него силой.
+
     Параметры:
-    **body** — тело, которое нужно переместить.
+    ax,ay ускоения по осям
+    body — тело, которое нужно переместить.
     """
 
-    ax = int(body.Fx / body.m)
-    body.x += body.Vx  # Fix mb FIXME: не понимаю как менять...
-    body.Vx += ax * dt
+    ax = body.Fx/body.m
+    body.x += body.Vx*dt
+    body.Vx += ax*dt
 
-    ay = int(body.Fy / body.m)
-    body.y += body.Vy  # Fix mb FIXME: не понимаю как менять...
-    body.Vy += ay * dt
-    return body
+    ay = body.Fy/body.m
+    body.y += body.Vy*dt
+    body.Vy += ay*dt
 
 
 def recalculate_space_objects_positions(space_objects, dt):
@@ -46,14 +46,14 @@ def recalculate_space_objects_positions(space_objects, dt):
 
     Параметры:
 
-    **space_objects** — список оьъектов, для которых нужно пересчитать координаты.
-    **dt** — шаг по времени
+    space_objects — список оьъектов, для которых нужно пересчитать координаты.
+    dt — шаг по времени
     """
 
     for body in space_objects:
         calculate_force(body, space_objects)
     for body in space_objects:
-        body = move_space_object(body, dt)
+        move_space_object(body, dt)
 
 
 if __name__ == "__main__":
